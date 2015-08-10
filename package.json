@@ -1,0 +1,24 @@
+{
+  "name": "Nut-Library",
+  "version": "0.0.2",
+  "description": "Front-end Library for UC.",
+  "author": "Shengjie.Yu <shengjie.yu@shenma-inc.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nutteam/nut.core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nutteam/nut.core/issues"
+  },
+  "keywords": [
+    "nut",
+    "front-end",
+    "uc"
+  ],
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-uglify": "^1.2.0"
+  },
+  "scripts": {},
+  "license": "MIT"
+}
