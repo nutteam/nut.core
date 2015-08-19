@@ -965,6 +965,18 @@
       return this;
     },
 
+    prepend: function(value) {
+      $.each(this, function(i, elem) {
+        var first = elem.firstElementChild;
+        if(first) {
+          $(first).before(value);
+        } else {
+          $(elem).append(value);
+        }
+      });
+      return this;
+    },
+
     toArray: function() {
       var ret = [];
       for (var i = 0, len = this.length; i < len; i++) {
@@ -1279,17 +1291,22 @@
       };
 
       var url = options.url,
-        data = options.data || null,
+        data = options.data || {},
         type = options.type || 'GET',
         dataType = options.dataType,
         charset =  options.scriptCharset,
-        jsonpCallback = options.jsonpCallback || 'nut' + Date.now(),
+        jsonpCallback = options.jsonpCallback || 'callback' + Date.now(),
         contentType = options.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
         success = options.success || $.noop,
         complete = options.complete || $.noop,
         error = options.error || $.noop;
 
+      if(dataType === 'jsonp') {
+        data.callback = jsonpCallback;
+      }
+
       data = formatParam(data);
+
       if(type === 'GET') {
         url += (url.indexOf('?') === -1 && data !== '' ? '?' + data : data);
       }

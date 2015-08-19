@@ -394,6 +394,13 @@ describe('test dom', function() {
     expect($('#append').find('h1').length).toEqual(1);
   });
 
+  it('prepend', function() {
+    $('#prepend').prepend('<h1>dd</h1>');
+    expect($('#prepend').find('h1').length).toEqual(1);
+    $('#prepend').prepend('<h2>dd</h2>');
+    expect($('#prepend').find('h2').index()).toEqual(0);
+  });
+
   it('toArray', function() {
     expect($('.toarray').toArray() instanceof Array).toEqual(true);
     expect($('.toarray').toArray().length).toEqual(3);
