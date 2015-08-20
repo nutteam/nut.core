@@ -70,18 +70,81 @@ $('.class').html(); // 取值
 
 ## DOM-traverse
 
-### find
-### parent
-### children
-### closest
-### eq
-### get
-### siblings
-### prev
-### next
-### index
-### each
-
+### find `.find(selector)`
+查找元素
+* param selector {String || Selector || DOMElement}
+```javascript
+$('#id').find('.class');
+$('#id').find($('.class'));
+$('#id').find(document.getElementById('id2'));
+```
+### parent `.parent()`
+查找父元素
+* param {undefined}
+```javascript
+$('#id').parent();
+```
+### children `.children()`
+查找子元素
+* param {undefined}
+```javascript
+$('#id').children();
+```
+### closest `.closest(selector)`
+查找最近的父元素
+* param selector {String || Selector || DOMElement}
+```javascript
+$('#id').closest('.class');
+$('#id').closest($('.class'));
+$('#id').closest(document.getElementById('id2'));
+```
+### eq `.eq(index)`
+查找同级某个索引值的元素
+* param index {Integer}
+```javascript
+$('.class').eq(2); // 返回同级的第三个Selector元素
+```
+### get `.get(index)`
+查找同级某个索引值的元素，与eq的差异是get返回的是原生DOMElement
+* param index {Integer}
+```javascript
+$('.class').get(2); // 返回同级的第三个DOMElement元素
+```
+### siblings `.siblings()`
+查找所有兄弟节点
+* param {undefined}
+```javascript
+$('#id').siblings();
+```
+### prev `.prev()`
+查找上一个兄弟节点
+* param {undefined}
+```javascript
+$('#id').prev();
+```
+### next `.next()`
+查找下一个兄弟节点
+* param {undefined}
+```javascript
+$('#id').next();
+```
+### index `.index(element)`
+查找节点在同级节点中的索引
+* param selector {Integer || Selector || DOMElement}
+```javascript
+$('#id').index(); // 返回当前节点的索引
+$('.class').index(document.getElementById('id'));
+$('.class').index($('#id'));
+```
+### each `.each(callback)`
+对节点集合进行遍历
+* param callback {Function}
+```javascript
+$('.class').each(function(i, elem){
+  console.log(i); // 索引
+  console.log(elem); // 元素
+});
+```
 ## DOM-effect
 
 ### hide
