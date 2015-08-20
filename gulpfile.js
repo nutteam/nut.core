@@ -20,4 +20,4 @@ gulp.task('jscs', function() {
     .pipe(jscs());
 });
 
-gulp.task('default', ['compress']);
+gulp.task('default', ['lint', 'jscs', 'compress']);

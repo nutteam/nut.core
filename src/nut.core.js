@@ -629,227 +629,6 @@
   };
 
   /**
-   * DOM event module.
-   */
-  var events = {
-    on: function(ev, selector, fn) {
-
-      $.each(this, function(i, elem) {
-        var eventList = ev.split(' '),
-          j = 0,
-          eventLen = eventList.length,
-          eventsData = $(elem).data('events') || {};
-
-        for (; j < eventLen; j++) {
-          var event = $.eventSupportBubbles(eventList[j]),
-            handle, isSelf, sel, eventHandle;
-
-          if (fn == null) {
-            handle = selector;
-            isSelf = true;
-            sel = elem;
-          } else {
-            handle = fn;
-            isSelf = false;
-            sel = selector;
-          }
-
-          var eventObj = {
-            elem: sel,
-            handle: handle
-          };
-
-          if (eventsData[event] === undefined) {
-            eventHandle = function(e) {
-              return $.event.dispatch.call(elem, e);
-            };
-
-            elem[event + eventSuffix] = handle;
-            elem[event + selfSuffix] = isSelf;
-            elem.addEventListener(event, eventHandle, false);
-
-            eventsData[event] = [eventObj];
-          } else {
-            eventsData[event].push(eventObj);
-          }
-
-          $(elem).data('events', eventsData);
-        }
-      });
-
-      return this;
-    },
-
-    trigger: function(event) {
-      var handle,
-        isSelf,
-        cur;
-      $.each(this, function(i, elem) {
-        cur = elem;
-        for (; cur; cur = cur.parentNode) {
-          handle = cur[event + eventSuffix];
-          isSelf = cur[event + selfSuffix];
-
-          if (isSelf === false && cur === elem) {
-            break;
-          } else if (handle) {
-            event = $.event.fix(event);
-            event.target = elem;
-            handle.call(elem, event);
-            break;
-          }
-        }
-
-        elem['on' + event] = null;
-
-        elem[event] && elem[event]();
-      });
-
-      return this;
-    }
-  };
-
-  /**
-   * Event constructor
-   * @param {String} src: event type or Event Object. Support standard or custom events.
-   * @returns {$.Event}
-   * @constructor
-   */
-  $.Event = function(src) {
-    if (!(this instanceof $.Event)) {
-      return new $.Event(src);
-    }
-
-    if (src && src.type) {
-      this.originalEvent = src;
-      this.isDefaultPrevented = src.defaultPrevented ? returnTrue : returnFalse;
-    } else {
-      this.type = src;
-    }
-  };
-
-  /**
-   * Prototype functions of $.Event.
-   * @this {$.Event}
-   */
-  $.Event.prototype = {
-    isDefaultPrevented: returnFalse,
-    isPropagationStopped: returnFalse,
-
-    preventDefault: function() {
-      var e = this.originalEvent;
-      this.isDefaultPrevented = returnTrue;
-
-      if (e && e.preventDefault) {
-        e.preventDefault();
-      }
-    },
-
-    stopPropagation: function() {
-      var e = this.originalEvent;
-      this.isPropagationStopped = returnTrue;
-
-      if (e && e.stopPropagation) {
-        e.stopPropagation();
-      }
-    }
-  };
-
-  $.event = {
-    dispatch: function(e) {
-
-      var elem = this,
-        eventsData = $(elem).data('events') || {},
-        target = e.target,
-        handlers, eventObj,
-        handle, related = e.relatedTarget,
-        i = 0,
-        len, type = e.type,
-        selector,
-        findElList, findElLen, findEl;
-
-      e = $.event.fix(e); // convert e to $.Event
-      e.target = target;
-      e.relatedTarget = related;
-
-      handlers = eventsData[type];
-      len = handlers.length;
-
-      for (; i < len; i++) {
-        eventObj = handlers[i];
-        selector = eventObj.elem;
-        handle = eventObj.handle;
-
-        if (selector.nodeType || selector === window) {
-          handle.call(elem, e);
-        } else {
-          findElList = $.getSelectorMatch(elem, selector);
-          findElLen = findElList.length;
-
-          for (var l = 0; l < findElLen; l++) {
-            findEl = findElList[l];
-
-            if (littleBubbleEvents.indexOf(type) === -1) {
-              if (findEl.contains(target) && !e.isDefaultPrevented() && !e.isPropagationStopped()) {
-                handle.call(findEl, e);
-                break;
-              }
-            } else {
-              if (findEl.contains(target)) {
-                if (!related || (related !== findEl && !findEl.contains(related)) && !e.isDefaultPrevented() && !e.isPropagationStopped()) {
-                  handle.call(findEl, e);
-                  break;
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    fix: function(event) {
-      var originalEvent = event;
-
-      event = new $.Event(event);
-
-      for (var prop in originalEvent) {
-        if (prop.indexOf('webkit') !== -1) {
-          continue;
-        }
-        if (typeof originalEvent[prop] === "function") {
-          event[prop] = originalEvent[prop].bind(originalEvent);
-        } else {
-          event[prop] = originalEvent[prop];
-        }
-      }
-
-      return event;
-    }
-  };
-
-  // Build-in events handle.
-  buildInEvents.forEach(function(name) {
-    Selector.prototype[name] = function(fn) {
-      var args = arguments;
-      $.each(this, function(i, elem) {
-        return args.length > 0 ? $(elem).on(name, fn) : $(elem).trigger(name);
-      });
-
-      return this;
-    };
-  });
-
-  // Hover and Delegate event.
-  $.extend(Selector.prototype, {
-    hover: function(fnOver, fnOut) {
-      return this.mouseenter(fnOver).mouseleave(fnOut || fnOver);
-    },
-    delegate: function(selector, types, fn) {
-      return this.on(types, selector, fn);
-    }
-  });
-
-  /**
    * DOM manipulations module.
    */
   var dom = {
@@ -1080,11 +859,233 @@
   register(traverse);
   register(effects);
   register(css);
-  register(events);
   register(dom);
   register(filters);
   register(data);
   register(styles);
+
+  /**
+   * Event module.
+   */
+  var events = {
+    on: function(ev, selector, fn) {
+
+      $.each(this, function(i, elem) {
+        var eventList = ev.split(' '),
+          j = 0,
+          eventLen = eventList.length,
+          eventsData = $(elem).data('events') || {};
+
+        for (; j < eventLen; j++) {
+          var event = $.eventSupportBubbles(eventList[j]),
+            handle, isSelf, sel, eventHandle;
+
+          if (fn == null) {
+            handle = selector;
+            isSelf = true;
+            sel = elem;
+          } else {
+            handle = fn;
+            isSelf = false;
+            sel = selector;
+          }
+
+          var eventObj = {
+            elem: sel,
+            handle: handle
+          };
+
+          if (eventsData[event] === undefined) {
+            eventHandle = function(e) {
+              return $.event.dispatch.call(elem, e);
+            };
+
+            elem[event + eventSuffix] = handle;
+            elem[event + selfSuffix] = isSelf;
+            elem.addEventListener(event, eventHandle, false);
+
+            eventsData[event] = [eventObj];
+          } else {
+            eventsData[event].push(eventObj);
+          }
+
+          $(elem).data('events', eventsData);
+        }
+      });
+
+      return this;
+    },
+
+    trigger: function(event) {
+      var handle,
+        isSelf,
+        cur;
+      $.each(this, function(i, elem) {
+        cur = elem;
+        for (; cur; cur = cur.parentNode) {
+          handle = cur[event + eventSuffix];
+          isSelf = cur[event + selfSuffix];
+
+          if (isSelf === false && cur === elem) {
+            break;
+          } else if (handle) {
+            event = $.event.fix(event);
+            event.target = elem;
+            handle.call(elem, event);
+            break;
+          }
+        }
+
+        elem['on' + event] = null;
+
+        elem[event] && elem[event]();
+      });
+
+      return this;
+    }
+  };
+
+  register(events);
+
+  /**
+   * Event constructor
+   * @param {String} src: event type or Event Object. Support standard or custom events.
+   * @returns {$.Event}
+   * @constructor
+   */
+  $.Event = function(src) {
+    if (!(this instanceof $.Event)) {
+      return new $.Event(src);
+    }
+
+    if (src && src.type) {
+      this.originalEvent = src;
+      this.isDefaultPrevented = src.defaultPrevented ? returnTrue : returnFalse;
+    } else {
+      this.type = src;
+    }
+  };
+
+  /**
+   * Prototype functions of $.Event.
+   * @this {$.Event}
+   */
+  $.Event.prototype = {
+    isDefaultPrevented: returnFalse,
+    isPropagationStopped: returnFalse,
+
+    preventDefault: function() {
+      var e = this.originalEvent;
+      this.isDefaultPrevented = returnTrue;
+
+      if (e && e.preventDefault) {
+        e.preventDefault();
+      }
+    },
+
+    stopPropagation: function() {
+      var e = this.originalEvent;
+      this.isPropagationStopped = returnTrue;
+
+      if (e && e.stopPropagation) {
+        e.stopPropagation();
+      }
+    }
+  };
+
+  $.event = {
+    dispatch: function(e) {
+
+      var elem = this,
+        eventsData = $(elem).data('events') || {},
+        target = e.target,
+        handlers, eventObj,
+        handle, related = e.relatedTarget,
+        i = 0,
+        len, type = e.type,
+        selector,
+        findElList, findElLen, findEl;
+
+      e = $.event.fix(e); // convert e to $.Event
+      e.target = target;
+      e.relatedTarget = related;
+
+      handlers = eventsData[type];
+      len = handlers.length;
+
+      for (; i < len; i++) {
+        eventObj = handlers[i];
+        selector = eventObj.elem;
+        handle = eventObj.handle;
+
+        if (selector.nodeType || selector === window) {
+          handle.call(elem, e);
+        } else {
+          findElList = $.getSelectorMatch(elem, selector);
+          findElLen = findElList.length;
+
+          for (var l = 0; l < findElLen; l++) {
+            findEl = findElList[l];
+
+            if (littleBubbleEvents.indexOf(type) === -1) {
+              if (findEl.contains(target) && !e.isDefaultPrevented() && !e.isPropagationStopped()) {
+                handle.call(findEl, e);
+                break;
+              }
+            } else {
+              if (findEl.contains(target)) {
+                if (!related || (related !== findEl && !findEl.contains(related)) && !e.isDefaultPrevented() && !e.isPropagationStopped()) {
+                  handle.call(findEl, e);
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    fix: function(event) {
+      var originalEvent = event;
+
+      event = new $.Event(event);
+
+      for (var prop in originalEvent) {
+        if (prop.indexOf('webkit') !== -1) {
+          continue;
+        }
+        if (typeof originalEvent[prop] === "function") {
+          event[prop] = originalEvent[prop].bind(originalEvent);
+        } else {
+          event[prop] = originalEvent[prop];
+        }
+      }
+
+      return event;
+    }
+  };
+
+  // Build-in events handle.
+  buildInEvents.forEach(function(name) {
+    Selector.prototype[name] = function(fn) {
+      var args = arguments;
+      $.each(this, function(i, elem) {
+        return args.length > 0 ? $(elem).on(name, fn) : $(elem).trigger(name);
+      });
+
+      return this;
+    };
+  });
+
+  // Hover and Delegate event.
+  $.extend(Selector.prototype, {
+    hover: function(fnOver, fnOut) {
+      return this.mouseenter(fnOver).mouseleave(fnOut || fnOver);
+    },
+    delegate: function(selector, types, fn) {
+      return this.on(types, selector, fn);
+    }
+  });
 
   /**
    * Help functions.
