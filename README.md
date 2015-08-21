@@ -1,7 +1,6 @@
 # Nut API文档
 > 所含接口是jQuery的常用子集。主要包括：DOM,Event,Ajax
 
--------
 
 ## DOM-attributes
 
@@ -16,9 +15,7 @@ $('.class').addClass('myclass1 myclass2');
 DOM删除class,或class list
 * param classList {String || undefined}
 ```javascript
-$('#id').removeClass('myclass');
-$('.class').removeClass('myclass1 myclass2');
-$('.class').removeClass(); // 删除所有class
+
 ```
 ### hasClass `.hasClass(className)`
 判断DOM是否含有某个class
@@ -147,7 +144,9 @@ $('.class').each(function(i, elem){
 ```
 ## DOM-effect
 
-### hide
+### hide `.hide()`
+隐藏元素
+* param 
 ### show
 ### toggle
 

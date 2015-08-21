@@ -1,7 +1,9 @@
-/*!
+/**
  * A DOM library. Impressed by jQuery and Zepto.
  * The APIs is subset of jQuery, if you know jQuery, you already know Nut.
+ *
  * @author Shengjie.Yu
+ * @version 0.0.2
  * @since 2015-01-22
  * Copyright 2014-2015 ucweb.
  * Released under the MIT license.
@@ -18,11 +20,6 @@
   'use strict';
 
   var document = window.document;
-
-  // Global variable.
-  var nut = window.nut = {};
-
-  nut.version = '0.0.2';
 
   // Object types.
   var class2type = {};
@@ -43,7 +40,6 @@
     'RegExp', 'Object', 'Error'
   ];
 
-
   // Function for return false.
   var returnFalse = function() {
     return false;
@@ -55,49 +51,44 @@
   };
 
   // Regexps.
-  var rdata = /(\w+)_data$/,
-    rid = /^#(.+)/,
-    rclass = /^\.(.+)/,
-    rtag = /^([a-zA-Z]+)$/,
-    rnoInnerhtml = /<(?:script|style|link)/i;
+  var rdata = /(\w+)_data$/;
+  var rid = /^#(.+)/;
+  var rclass = /^\.(.+)/;
+  var rtag = /^([a-zA-Z]+)$/;
+  var rnoInnerhtml = /<(?:script|style|link)/i;
 
   // Suffixs.
-  var eventSuffix = '_event',
-    selfSuffix = '_self',
-    dataSuffix = '_data';
+  var eventSuffix = '_event';
+  var selfSuffix = '_self';
+  var dataSuffix = '_data';
 
-  /**
-   * Selector constructor.
-   * @param {Object} selector.
-   * @constructor
-   */
+  // Selector constructor.
   var Selector = function(selector) {
     if (!selector) {
       return this;
     }
 
     var element;
+    var i = 0;
     if (typeof selector === 'string') {
       // html string
       if (selector[0] === '<' && selector[selector.length - 1] === '>' &&
           selector.length >= 3) {
-        var arr = $.parseHTML(selector),
-          i = 0,
-          len = arr.length;
+        var arr = $.parseHTML(selector);
+        var len = arr.length;
 
         for (; i < len; i++) {
           this[i] = arr[i];
         }
         this.length = len;
       } else { // id class tag and other
-        var selectorList = selector.split(','),
-          i = 0,
-          listLen = selectorList.length,
-          index = 0,
-          j = 0,
-          k = 0,
-          thisLen = this.length || 0,
-          elLen;
+        var selectorList = selector.split(',');
+        var listLen = selectorList.length;
+        var index = 0;
+        var j = 0;
+        var k = 0;
+        var thisLen = this.length || 0;
+        var elLen;
 
         for (; i < listLen; i++) {
           selector = selectorList[i].trim().split(/\s/);
@@ -105,11 +96,11 @@
           if (deepLen === 1) {
             selector = selector[0];
             element = $.getSelectorMatch(document, selector);
-          } else if(deepLen === 2) {
-            var parentSel = selector[0],
-              chileSel = selector[1],
-              els = [],
-              parentEls = $.getSelectorMatch(document, parentSel);
+          } else if (deepLen === 2) {
+            var parentSel = selector[0];
+            var chileSel = selector[1];
+            var els = [];
+            var parentEls = $.getSelectorMatch(document, parentSel);
 
             for (var flen = parentEls.length; k < flen; k++) {
               var childrens = $.getSelectorMatch(parentEls[k], chileSel);
@@ -146,45 +137,55 @@
 
   /**
    * $ singleton.
-   * @param {String} selector: string selector. such as "#id",".class","tag".
-   * @param {String} selector: html string. such as "<div></div>".
-   * @param {HTMLElement} selector: html element. such as "document.body".
-   * @param {Selector} selector: Selector instance. such as "$('#id')".
-   * @param {Function} selector: an anonymous function. such as "function(){}".
+   *
+   * @param {String | Object | Function} selector
+   * such as "#id",".class","tag".
+   * html string. such as "<div></div>".
+   * html element. such as "document.body".
+   * Selector instance. such as "$('#id')".
+   * an anonymous function. such as "function(){}".
    * @returns {Selector} return Selector instance.
    */
   var $ = function(selector) {
     return new Selector(selector);
   };
 
+  /**
+  * Create plugin
+  * @returns plugin
+  */
   $.fn = Selector.prototype;
 
-  /**
-   * Register a module.
-   * @param {Object} module: a module of functions.
-   */
+  // Register a module. module: a module of functions.
   var register = function(module) {
     $.extend(Selector.prototype, module);
   };
 
   /**
-   * Extend function.
+   * deep or shallow copy an object
+   *
+   * @type {Function}
    */
   $.extend = $.fn.extend = function() {
-    var src, copyIsArray, copy, name, options, clone,
-      target = arguments[0] || {},
-      i = 1,
-      length = arguments.length,
-      deep = false;
+    var src;
+    var copyIsArray;
+    var copy;
+    var name;
+    var options;
+    var clone;
+    var target = arguments[0] || {};
+    var i = 1;
+    var length = arguments.length;
+    var deep = false;
 
-    if (typeof target === "boolean") {
+    if (typeof target === 'boolean') {
       deep = target;
 
       target = arguments[i] || {};
       i++;
     }
 
-    if (typeof target !== "object" && $.type(target) !== 'function') {
+    if (typeof target !== 'object' && $.type(target) !== 'function') {
       target = {};
     }
 
@@ -209,7 +210,7 @@
               copyIsArray = false;
               clone = src && $.type(src) === 'array' ? src : [];
             } else {
-              clone = src && $.type(src) == 'object' ? src : {};
+              clone = src && $.type(src) === 'object' ? src : {};
             }
 
             target[name] = $.extend(deep, clone, copy);
@@ -229,6 +230,19 @@
    * DOM attribute module.
    */
   var attributes = {
+
+    /**
+     * DOM增加class,或class list
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').addClass('myclass');
+     * $('.class').addClass('myclass1 myclass2');
+     * ```
+     *
+     * @param {String} classList class or classList
+     * @returns {Selector} origin selector object
+     */
     addClass: function(classList) {
       var className;
       $.each(this, function(i, elem) {
@@ -236,7 +250,8 @@
           var classArr = classList.split(' ');
           for (var j = 0, len = classArr.length; j < len; j++) {
             className = classArr[j];
-            !elem.classList.contains(className) && elem.classList.add(className);
+            !elem.classList.contains(className) &&
+            elem.classList.add(className);
           }
         }
       });
@@ -244,6 +259,34 @@
       return this;
     },
 
+    /**
+     * 判断DOM是否含有某个class
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').hasClass('myclass');
+     * ```
+     *
+     * @param {String} className
+     * @returns {Boolean}
+     */
+    hasClass: function(className) {
+      return this[0] ? this[0].classList.contains(className) : '';
+    },
+
+    /**
+     * DOM删除class,或class list
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').removeClass('myclass');
+     * $('.class').removeClass('myclass1 myclass2');
+     * $('.class').removeClass(); // 删除所有class
+     * ```
+     *
+     * @param {String | undefined} classList
+     * @returns {Selector} origin selector object
+     */
     removeClass: function(classList) {
       var className;
       $.each(this, function(i, elem) {
@@ -251,7 +294,8 @@
           var classArr = classList.split(' ');
           for (var j = 0, len = classArr.length; j < len; j++) {
             className = classArr[j];
-            elem.classList.contains(className) && elem.classList.remove(className);
+            elem.classList.contains(className) &&
+            elem.classList.remove(className);
           }
         } else if (classList === undefined) {
           elem.className = '';
@@ -261,10 +305,17 @@
       return this;
     },
 
-    hasClass: function(className) {
-      return this[0] ? this[0].classList.contains(className) : '';
-    },
-
+    /**
+     * DOM切换某个class，有则删，无则加
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').toggleClass('myclass');
+     * ```
+     *
+     * @param {String} className
+     * @returns {Selector} origin selector object
+     */
     toggleClass: function(className) {
       $.each(this, function(i, elem) {
         elem.classList.contains(className) ? elem.classList.remove(className) :
@@ -273,10 +324,24 @@
       return this;
     },
 
+    /**
+     * DOM设置属性，或读取属性
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').attr('myattr', 'value'); // 设置
+     * $('#id').attr('myattr'); // 读取
+     * ```
+     *
+     * @param {String} attr
+     * @param {String | undefined} val
+     * @returns {Selector} origin selector object
+     */
     attr: function(attr, val) {
       if ($.type(attr) === 'object') {
         $.each(this, function(i, elem) {
-          var key, value;
+          var key;
+          var value;
           for (key in attr) {
             value = attr[key];
             elem.setAttribute(key, value);
@@ -293,6 +358,17 @@
       }
     },
 
+    /**
+     * DOM删除属性
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').removeAttr('myattr');
+     * ```
+     *
+     * @param {String} attr
+     * @returns {Selector} origin selector object
+     */
     removeAttr: function(attr) {
       $.each(this, function(i, elem) {
         elem.removeAttribute(attr);
@@ -300,6 +376,18 @@
       return this;
     },
 
+    /**
+     * 表单标签设置值或取值
+     *
+     * ### example:
+     * ```javascript
+     * $('input').val('1'); // 设置
+     * $('input').val(); // 读取
+     * ```
+     *
+     * @param {String | undefined} val
+     * @returns {Selector} origin selector object
+     */
     val: function(val) {
       if (val !== undefined) {
         $.each(this, function(i, elem) {
@@ -311,6 +399,18 @@
       }
     },
 
+    /**
+     * DOM设置文本或读文本
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').text('mytext'); // 设置
+     * $('.class').text(); // 取值
+     * ```
+     *
+     * @param {String | undefined} text
+     * @returns {Selector} origin selector object
+     */
     text: function(text) {
       if (text !== undefined) {
         $.each(this, function(i, elem) {
@@ -322,6 +422,18 @@
       }
     },
 
+    /**
+     * DOM设置html或读html
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').html('<i>html</i>'); // 设置
+     * $('.class').html(); // 取值
+     * ```
+     *
+     * @param {String | undefined} html
+     * @returns {Selector} origin selector object
+     */
     html: function(html) {
       if (html !== undefined) {
         $.each(this, function(i, elem) {
@@ -346,17 +458,17 @@
    */
   var traverse = {
     find: function(selector) {
-      var k = 0,
-        that = new Selector();
+      var k = 0;
+      var that = new Selector();
 
       $.each(this, function(i, elem) {
         if (!selector) {
           return $();
         }
 
-        var element = $.getSelectorMatch(elem, selector),
-          len = element.length,
-          j = 0;
+        var element = $.getSelectorMatch(elem, selector);
+        var len = element.length;
+        var j = 0;
         for (; j < len; j++) {
           that[k + j] = element[j];
         }
@@ -368,9 +480,9 @@
     },
 
     parent: function() {
-      var k = 0,
-        element,
-        that = new Selector();
+      var k = 0;
+      var element;
+      var that = new Selector();
 
       $.each(this, function(i, elem) {
         element = elem.parentNode;
@@ -385,9 +497,9 @@
     },
 
     children: function() {
-      var k = 0,
-        element,
-        that = new Selector();
+      var k = 0;
+      var element;
+      var that = new Selector();
 
       $.each(this, function(i, elem) {
         var childs = elem.childNodes;
@@ -405,10 +517,10 @@
     },
 
     closest: function(selector) {
-      var k = 0,
-        that = new Selector(),
-        pos = typeof selector !== 'string' ? $(selector) : 0,
-        cur;
+      var k = 0;
+      var that = new Selector();
+      var pos = typeof selector !== 'string' ? $(selector) : 0;
+      var cur;
 
       $.each(this, function(i, elem) {
         for (cur = elem; cur; cur = cur.parentNode) {
@@ -427,9 +539,9 @@
     },
 
     eq: function(index) {
-      var that = new Selector(),
-        len = this.length,
-        ret = 0;
+      var that = new Selector();
+      var len = this.length;
+      var ret = 0;
 
       for (var i = 0; i < len; i++) {
         if (i === index) {
@@ -448,8 +560,8 @@
     },
 
     siblings: function() {
-      var k = 0,
-        that = new Selector();
+      var k = 0;
+      var that = new Selector();
 
       $.each(this, function(i, elem) {
         var parent = this.parentNode;
@@ -471,9 +583,9 @@
     },
 
     prev: function() {
-      var k = 0,
-        element,
-        that = new Selector();
+      var k = 0;
+      var element;
+      var that = new Selector();
 
       $.each(this, function(i, elem) {
         element = elem.previousElementSibling;
@@ -488,9 +600,9 @@
     },
 
     next: function() {
-      var k = 0,
-        element,
-        that = new Selector();
+      var k = 0;
+      var element;
+      var that = new Selector();
 
       $.each(this, function(i, elem) {
         element = elem.nextElementSibling;
@@ -569,12 +681,13 @@
     css: function(attr, val, extra) {
       if ($.type(attr) === 'object') {
         $.each(this, function(i, elem) {
-          var key, value;
+          var key;
+          var value;
           for (key in attr) {
             value = attr[key];
             elem.style[key] =
-              (typeof value === 'number' && key !== 'zIndex' && key !== 'opacity')
-              ? value + 'px' : value;
+              (typeof value === 'number' && key !== 'zIndex' &&
+                key !== 'opacity') ? value + 'px' : value;
           }
         });
         return this;
@@ -595,7 +708,8 @@
         if (elem === window) {
           return window.innerWidth;
         } else if (elem === document) {
-          return Math.max(document.body.offsetWidth, document.documentElement.offsetWidth);
+          return Math.max(document.body.offsetWidth,
+            document.documentElement.offsetWidth);
         } else {
           return this[0] ? parseInt($.calCSS(this[0], 'width')) : 0;
         }
@@ -614,7 +728,8 @@
         if (elem === window) {
           return window.innerHeight;
         } else if (elem === document) {
-          return Math.max(document.body.offsetHeight, document.documentElement.offsetHeight);
+          return Math.max(document.body.offsetHeight,
+            document.documentElement.offsetHeight);
         } else {
           return this[0] ? parseInt($.calCSS(this[0], 'height')) : 0;
         }
@@ -747,7 +862,7 @@
     prepend: function(value) {
       $.each(this, function(i, elem) {
         var first = elem.firstElementChild;
-        if(first) {
+        if (first) {
           $(first).before(value);
         } else {
           $(elem).append(value);
@@ -799,10 +914,10 @@
   var data = {
     data: function(key, value) {
       if (key === undefined && value === undefined) {
-        var el = this[0],
-          i,
-          j,
-          ret = {};
+        var el = this[0];
+        var i;
+        var j;
+        var ret = {};
 
         for (i in el) {
           if (i.match(rdata) !== null) {
@@ -833,12 +948,11 @@
   var styles = {
     offset: function() {
       var elem = this[0];
-
       var rect = {
-          left: 0,
-          top: 0
-        },
-        clientRect = elem.getBoundingClientRect();
+        left: 0,
+        top: 0
+      };
+      var clientRect = elem.getBoundingClientRect();
 
       if (clientRect != null) {
         rect = {
@@ -871,14 +985,19 @@
     on: function(ev, selector, fn) {
 
       $.each(this, function(i, elem) {
-        var eventList = ev.split(' '),
-          j = 0,
-          eventLen = eventList.length,
-          eventsData = $(elem).data('events') || {};
+        var eventList = ev.split(' ');
+        var j = 0;
+        var eventLen = eventList.length;
+        var eventsData = $(elem).data('events') || {};
+        var eventHandle = function(e) {
+          return $.event.dispatch.call(elem, e);
+        };
 
         for (; j < eventLen; j++) {
-          var event = $.eventSupportBubbles(eventList[j]),
-            handle, isSelf, sel, eventHandle;
+          var event = $.eventSupportBubbles(eventList[j]);
+          var handle;
+          var isSelf;
+          var sel;
 
           if (fn == null) {
             handle = selector;
@@ -896,10 +1015,6 @@
           };
 
           if (eventsData[event] === undefined) {
-            eventHandle = function(e) {
-              return $.event.dispatch.call(elem, e);
-            };
-
             elem[event + eventSuffix] = handle;
             elem[event + selfSuffix] = isSelf;
             elem.addEventListener(event, eventHandle, false);
@@ -917,9 +1032,9 @@
     },
 
     trigger: function(event) {
-      var handle,
-        isSelf,
-        cur;
+      var handle;
+      var isSelf;
+      var cur;
       $.each(this, function(i, elem) {
         cur = elem;
         for (; cur; cur = cur.parentNode) {
@@ -949,7 +1064,9 @@
 
   /**
    * Event constructor
-   * @param {String} src: event type or Event Object. Support standard or custom events.
+   *
+   * @param {String} src event type or Event Object.
+   *   Support standard or custom events.
    * @returns {$.Event}
    * @constructor
    */
@@ -996,15 +1113,20 @@
   $.event = {
     dispatch: function(e) {
 
-      var elem = this,
-        eventsData = $(elem).data('events') || {},
-        target = e.target,
-        handlers, eventObj,
-        handle, related = e.relatedTarget,
-        i = 0,
-        len, type = e.type,
-        selector,
-        findElList, findElLen, findEl;
+      var elem = this;
+      var eventsData = $(elem).data('events') || {};
+      var target = e.target;
+      var handlers;
+      var eventObj;
+      var handle;
+      var related = e.relatedTarget;
+      var i = 0;
+      var len;
+      var type = e.type;
+      var selector;
+      var findElList;
+      var findElLen;
+      var findEl;
 
       e = $.event.fix(e); // convert e to $.Event
       e.target = target;
@@ -1028,13 +1150,16 @@
             findEl = findElList[l];
 
             if (littleBubbleEvents.indexOf(type) === -1) {
-              if (findEl.contains(target) && !e.isDefaultPrevented() && !e.isPropagationStopped()) {
+              if (findEl.contains(target) && !e.isDefaultPrevented() &&
+                  !e.isPropagationStopped()) {
                 handle.call(findEl, e);
                 break;
               }
             } else {
               if (findEl.contains(target)) {
-                if (!related || (related !== findEl && !findEl.contains(related)) && !e.isDefaultPrevented() && !e.isPropagationStopped()) {
+                if (!related ||
+                  (related !== findEl && !findEl.contains(related)) &&
+                  !e.isDefaultPrevented() && !e.isPropagationStopped()) {
                   handle.call(findEl, e);
                   break;
                 }
@@ -1054,7 +1179,7 @@
         if (prop.indexOf('webkit') !== -1) {
           continue;
         }
-        if (typeof originalEvent[prop] === "function") {
+        if (typeof originalEvent[prop] === 'function') {
           event[prop] = originalEvent[prop].bind(originalEvent);
         } else {
           event[prop] = originalEvent[prop];
@@ -1092,10 +1217,10 @@
    */
   var tools = {
     each: function(obj, callback) {
-      var i = 0,
-        value,
-        len = obj.length,
-        elem;
+      var i = 0;
+      var value;
+      var len = obj.length;
+      var elem;
 
       if (obj instanceof Selector || $.type(obj) === 'array') {
         for (; i < len; i++) {
@@ -1139,8 +1264,8 @@
           }
         }
       } else {
-        var matchs = $(selector),
-          match;
+        var matchs = $(selector);
+        var match;
 
         for (var i = 0, len = matchs.length; i < len; i++) {
           match = matchs[i];
@@ -1224,28 +1349,28 @@
 
     globalEval: function(data) {
       if (typeof data === 'string' && data.trim()) {
-        window['eval'].call(window, data);
+        window.eval.call(window, data);
       }
     },
 
     buildFragment: function(value) {
-      var frag = document.createDocumentFragment(),
-        temp = document.createElement('div'),
-        clone;
+      var frag = document.createDocumentFragment();
+      var temp = document.createElement('div');
+      var clone;
       temp.innerHTML = value;
 
       var childs = temp.childNodes;
 
-      for (var i = 0, len = childs.length; i < len; i++) {
+      for (var i = 0, childsLen = childs.length; i < childsLen; i++) {
         clone = childs[i].cloneNode(true);
         frag.appendChild(clone);
       }
 
       var scripts = temp.getElementsByTagName('script');
       if (scripts.length > 0) {
-        for (var j = 0, len = scripts.length; j < len; j++) {
-          var script = scripts[j],
-            scriptContent = script.text || script.textContent;
+        for (var j = 0, scriptsLen = scripts.length; j < scriptsLen; j++) {
+          var script = scripts[j];
+          var scriptContent = script.text || script.textContent;
           $.globalEval(scriptContent);
         }
       }
@@ -1272,10 +1397,10 @@
    * @param options
    */
   var ajaxs = {
-    ajax: function (options) {
+    ajax: function(options) {
       var formatParam = function(p) {
         var ret = [];
-        for(var k in p) {
+        for (var k in p) {
           var v = p[k];
           ret.push(k + '=' + v);
         }
@@ -1284,35 +1409,37 @@
       };
 
       var accepts = {
-        script: 'text/javascript, application/javascript, application/x-javascript',
+        script: 'text/javascript, application/javascript, ' +
+          'application/x-javascript',
         json: 'application/json',
         xml: 'application/xml, text/xml',
         html: 'text/html',
         text: 'text/plain'
       };
 
-      var url = options.url,
-        data = options.data || {},
-        type = options.type || 'GET',
-        dataType = options.dataType,
-        charset =  options.scriptCharset,
-        jsonpCallback = options.jsonpCallback || 'callback' + Date.now(),
-        contentType = options.contentType || 'application/x-www-form-urlencoded; charset=UTF-8',
-        success = options.success || $.noop,
-        complete = options.complete || $.noop,
-        error = options.error || $.noop;
+      var url = options.url;
+      var data = options.data || {};
+      var type = options.type || 'GET';
+      var dataType = options.dataType;
+      var charset =  options.scriptCharset;
+      var jsonpCallback = options.jsonpCallback || 'callback' + Date.now();
+      var contentType = options.contentType ||
+        'application/x-www-form-urlencoded; charset=UTF-8';
+      var success = options.success || $.noop;
+      var complete = options.complete || $.noop;
+      var error = options.error || $.noop;
 
-      if(dataType === 'jsonp') {
+      if (dataType === 'jsonp') {
         data.callback = jsonpCallback;
       }
 
       data = formatParam(data);
 
-      if(type === 'GET') {
+      if (type === 'GET') {
         url += (url.indexOf('?') === -1 && data !== '' ? '?' + data : data);
       }
 
-      if(dataType === 'jsonp') {
+      if (dataType === 'jsonp') {
         var param = {
           url: url,
           jsonpCallback: jsonpCallback,
@@ -1341,12 +1468,12 @@
     },
 
     JSONP: function(param) {
-      var url = param.url,
-        jsonpCallback = param.jsonpCallback,
-        success = param.success,
-        complete = param.complete,
-        error = param.error,
-        charset = param.charset;
+      var url = param.url;
+      var jsonpCallback = param.jsonpCallback;
+      var success = param.success;
+      var complete = param.complete;
+      var error = param.error;
+      var charset = param.charset;
 
       charset = charset || 'utf-8';
       window[jsonpCallback] = success;
@@ -1372,13 +1499,14 @@
    */
   $.extend(ajaxs);
 
-  $.each(['innerWidth', 'innerHeight', 'outerWidth', 'outerHeight'], function(i, name) {
+  $.each(['innerWidth', 'innerHeight', 'outerWidth', 'outerHeight'],
+      function(i, name) {
     if (name.match(/(inner|outer)(\w+)/)) {
-      $.fn[name] = function(prop, value, extra) {
+      $.fn[name] = (function(prop, value, extra) {
         return function() {
           return $(this).css(prop, null, extra);
         };
-      }(RegExp.$2, null, RegExp.$1);
+      }(RegExp.$2, null, RegExp.$1));
     }
   });
 

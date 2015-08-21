@@ -2,6 +2,8 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var jshint = require('gulp-jshint');
 var jscs = require('gulp-jscs');
+var markdox = require("gulp-markdox");
+var concat = require("gulp-concat");
 
 gulp.task('compress', function() {
   return gulp.src('src/*.js')
@@ -20,4 +22,11 @@ gulp.task('jscs', function() {
     .pipe(jscs());
 });
 
-gulp.task('default', ['lint', 'jscs', 'compress']);
+gulp.task("doc", function() {
+  return gulp.src("src/*.js")
+    .pipe(markdox())
+    .pipe(concat("api.md"))
+    .pipe(gulp.dest("./"));
+});
+
+gulp.task('default', ['lint', 'jscs', 'doc', 'compress']);
