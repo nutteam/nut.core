@@ -1,4 +1,5 @@
 /**
+ * # Nut.core.js
  * A DOM library. Impressed by jQuery and Zepto.
  * The APIs is subset of jQuery, if you know jQuery, you already know Nut.
  *
@@ -143,12 +144,16 @@
   /**
    * $ singleton.
    *
-   * @param {String | Object | Function} selector <br/>
+   * @param {String | DOMElement | Selector | Function} selector <br/>
    * html string. such as "#id",".class","tag".<br/>
-   * html string. such as `<div></div>`.<br/>
-   * html element. such as "document.body".<br/>
+   * html string. such as "`<div></div>`".<br/>
+   * dom element. such as "document.body".<br/>
    * Selector instance. such as "$('#id')".<br/>
    * an anonymous function. such as "function(){}".
+   * **Now, when selector is string, it only support two-layer selector,**
+   * **Comming soon,it will support all the selectors**
+   * **which w3c selector-API `document.querySelectorAll` support. **
+   *
    * @returns {Selector} return Selector instance.
    */
   var $ = function(selector) {
