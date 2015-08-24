@@ -12,6 +12,11 @@ describe('test selector', function() {
     expect($('.li').length).toEqual(3);
   });
 
+  it('mutil selector', function() {
+    expect($('#jasmine,#id1').length).toEqual(2);
+    expect($('#jasmine ul,#id1').length).toEqual(2);
+  });
+
   it('tranverse selector', function() {
     expect($('#jasmine ul').length).toEqual(1);
   });
@@ -554,3 +559,11 @@ describe('test ajax', function() {
   });
 
 });
+
+
+$.ajax({
+  url: './mockdata/test',
+  success: function(data){
+    console.log(data,typeof data);
+  }
+})

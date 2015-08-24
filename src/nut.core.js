@@ -68,7 +68,7 @@
       return this;
     }
 
-    var element;
+    var element = [];
     var i = 0;
     if (typeof selector === 'string') {
       // html string
@@ -84,21 +84,25 @@
       } else { // id class tag and other
         var selectorList = selector.split(',');
         var listLen = selectorList.length;
+        var sel;
         var index = 0;
         var j = 0;
         var k = 0;
         var thisLen = this.length || 0;
         var elLen;
+        var selectorMath = [];
 
         for (; i < listLen; i++) {
-          selector = selectorList[i].trim().split(/\s/);
-          var deepLen = selector.length;
+          sel = selectorList[i].trim().split(/\s/);
+          var deepLen = sel.length;
           if (deepLen === 1) {
-            selector = selector[0];
-            element = $.getSelectorMatch(document, selector);
+            sel = sel[0];
+            selectorMath = $.getSelectorMatch(document, sel);
+            element = element.length === 0 ? selectorMath :
+              element.concat(selectorMath);
           } else if (deepLen === 2) {
-            var parentSel = selector[0];
-            var chileSel = selector[1];
+            var parentSel = sel[0];
+            var chileSel = sel[1];
             var els = [];
             var parentEls = $.getSelectorMatch(document, parentSel);
 
@@ -109,7 +113,8 @@
               }
             }
 
-            element = els;
+            element = element.length === 0 ? els :
+              element.concat(els);
           } else {
             console.error('selector too deep');
             element = [];
@@ -489,7 +494,7 @@
      * ```
      *
      * @param {String | Selector | DOMElement} selector
-     * @returns {Selector}
+     * @returns {Selector} the finded elements
      */
     find: function(selector) {
       var k = 0;
@@ -521,7 +526,7 @@
      * $('#id').parent();
      * ```
      *
-     * @returns {Selector}
+     * @returns {Selector} the parent element
      */
     parent: function() {
       var k = 0;
@@ -548,7 +553,7 @@
      * $('#id').children();
      * ```
      *
-     * @returns {Selector}
+     * @returns {Selector} the children elements
      */
     children: function() {
       var k = 0;
@@ -581,7 +586,7 @@
      * ```
      *
      * @param {String | Selector | DOMElement} selector
-     * @returns {Selector}
+     * @returns {Selector} the closest parent element
      */
     closest: function(selector) {
       var k = 0;
@@ -614,7 +619,7 @@
      * ```
      *
      * @param {Integer} index
-     * @returns {Selector}
+     * @returns {Selector} the finded element
      */
     eq: function(index) {
       var that = new Selector();
@@ -643,7 +648,7 @@
      * ```
      *
      * @param {Integer} index
-     * @returns {DOMElement}
+     * @returns {DOMElement} the finded element
      */
     get: function(index) {
       return $(this).eq(index)[0];
@@ -657,7 +662,7 @@
      * $('#id').siblings();
      * ```
      *
-     * @returns {Selector}
+     * @returns {Selector} the sibling elements
      */
     siblings: function() {
       var k = 0;
@@ -690,7 +695,7 @@
      * $('#id').prev();
      * ```
      *
-     * @returns {Selector}
+     * @returns {Selector} the prev element
      */
     prev: function() {
       var k = 0;
@@ -717,7 +722,7 @@
      * $('#id').next();
      * ```
      *
-     * @returns {Selector}
+     * @returns {Selector} the next element
      */
     next: function() {
       var k = 0;
@@ -747,7 +752,7 @@
      * ```
      *
      * @param {Integer | Selector | DOMElement} element
-     * @returns {Number}
+     * @returns {Number} the index
      */
     index: function(element) {
       var ret = -1;
@@ -778,7 +783,7 @@
      * Callback traversal of dom elements
      *
      * @param {Function} callback
-     * @returns {traverse}
+     * @returns {Selector} origin selector object
      */
     each: function(callback) {
       $.each(this, callback);
@@ -790,6 +795,12 @@
    * DOM effect module.
    */
   var effects = {
+
+    /**
+     * Hide some element/s
+     *
+     * @returns {Selector} origin selector object
+     */
     hide: function() {
       $.each(this, function(i, elem) {
         elem.style.display = 'none';
@@ -797,6 +808,11 @@
       return this;
     },
 
+    /**
+     * Show some element/s
+     *
+     * @returns {Selector} origin selector object
+     */
     show: function() {
       $.each(this, function(i, elem) {
         elem.style.display = 'block';
@@ -804,6 +820,11 @@
       return this;
     },
 
+    /**
+     * Toggle some element/s
+     *
+     * @returns {Selector} origin selector object
+     */
     toggle: function() {
       $.each(this, function(i, elem) {
         $.calCSS(elem, 'display') !== 'none' ?
@@ -817,6 +838,25 @@
    * DOM style module.
    */
   var css = {
+
+    /**
+     * Set or get the css value of some attribute
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').css('width', 100);
+     * $('#id').css('height');
+     * $('#id').css({
+     *   'width': 100,
+     *   'height': 100
+     * });
+     * ```
+     *
+     * @param {String || Object} attr
+     * @param {String | undefined} val
+     * @param {String} extra inner or outer
+     * @returns {Selector} origin selector object
+     */
     css: function(attr, val, extra) {
       if ($.type(attr) === 'object') {
         $.each(this, function(i, elem) {
@@ -841,6 +881,12 @@
       }
     },
 
+    /**
+     * Get the width of element
+     *
+     * @param {String} w width
+     * @returns {Selector} origin selector object
+     */
     width: function(w) {
       if (w === undefined) {
         var elem = this[0];
@@ -861,6 +907,12 @@
       }
     },
 
+    /**
+     * Get the height of element
+     *
+     * @param {String} h
+     * @returns {Selector} origin selector object
+     */
     height: function(h) {
       if (h === undefined) {
         var elem = this[0];
@@ -886,6 +938,12 @@
    * DOM manipulations module.
    */
   var dom = {
+
+    /**
+     * Set the inner html of selected element empty
+     *
+     * @returns {Selector} origin selector object
+     */
     empty: function() {
       $.each(this, function(i, elem) {
         elem.innerHTML = '';
@@ -893,6 +951,11 @@
       return this;
     },
 
+    /**
+     * Remove the selected element
+     *
+     * @returns {Selector} origin selector object
+     */
     remove: function() {
       $.each(this, function(i, elem) {
         elem.parentNode.removeChild(elem);
@@ -900,6 +963,19 @@
       return this;
     },
 
+    /**
+     * Insert some element before selected element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').before($('#id1'));
+     * $('#id').before('<div>1</div>');
+     * $('#id').before(document.createElement('p'));
+     * ```
+     *
+     * @param {Selector | String | DOMElement} value
+     * @returns {Selector} origin selector object
+     */
     before: function(value) {
       if (value instanceof Selector) {
         $.each(this, function(i, elem) {
@@ -926,6 +1002,19 @@
       }
     },
 
+    /**
+     * Insert some element after selected element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').after($('#id1'));
+     * $('#id').after('<div>1</div>');
+     * $('#id').after(document.createElement('p'));
+     * ```
+     *
+     * @param {Selector | String | DOMElement} value
+     * @returns {Selector} origin selector object
+     */
     after: function(value) {
       if (value instanceof Selector) {
         $.each(this, function(i, elem) {
@@ -967,6 +1056,19 @@
       }
     },
 
+    /**
+     * Append some element of selected element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').append($('#id1'));
+     * $('#id').append('<div>1</div>');
+     * $('#id').append(document.createElement('p'));
+     * ```
+     *
+     * @param {Selector | String | DOMElement} value
+     * @returns {Selector} origin selector object
+     */
     append: function(value) {
       if (value instanceof Selector) {
         $.each(this, function(i, elem) {
@@ -993,11 +1095,37 @@
       }
     },
 
+    /**
+     * Append element to the certain element
+     *
+     * ### example:
+     * ```javascript
+     * $($('#id1')).appendTo('#id');
+     * $('<div>1</div>').appendTo('#id');
+     * $(document.createElement('p')).appendTo('#id');
+     * ```
+     *
+     * @param {Selector | String | DOMElement} value
+     * @returns {Selector} origin selector object
+     */
     appendTo: function(value) {
       $(value).append(this);
       return this;
     },
 
+    /**
+     * Pre append element to the certain element
+     *
+     * ### example:
+     * ```javascript
+     * $($('#id1')).prepend('#id');
+     * $('<div>1</div>').prepend('#id');
+     * $(document.createElement('p')).prepend('#id');
+     * ```
+     *
+     * @param {Selector | String | DOMElement} value
+     * @returns {Selector} origin selector object
+     */
     prepend: function(value) {
       $.each(this, function(i, elem) {
         var first = elem.firstElementChild;
@@ -1010,6 +1138,16 @@
       return this;
     },
 
+    /**
+     * Convert Selector objects to Array
+     *
+     * ### example:
+     * ```javascript
+     * $('.class').toArray(); // return [dom1, dom2..]
+     * ```
+     *
+     * @returns {Array} the dom array
+     */
     toArray: function() {
       var ret = [];
       for (var i = 0, len = this.length; i < len; i++) {
@@ -1018,12 +1156,38 @@
       return ret;
     },
 
+    /**
+     * Get the length of selected objects
+     *
+     * ### example:
+     * ```javascript
+     * $('.class').size(); // get 5
+     * ```
+     *
+     * @returns {Number} the length
+     */
     size: function() {
       return $(this).length;
     }
   };
 
   var filters = {
+
+    /**
+     * Check the element belong to some type
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').is(':hidden');
+     * $('#id').is(':visible');
+     * $('#id').is('#id');
+     * $('.class').is('.class');
+     * $('a').is('a');
+     * ```
+     *
+     * @param {String} selector
+     * @returns {Boolean}
+     */
     is: function(selector) {
       var ret;
 
@@ -1051,6 +1215,21 @@
    * DOM data module.
    */
   var data = {
+
+    /**
+     * Set or get the data of dom element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').data('attr', '1'); // set
+     * $('#id').data('attr'); // get the data of attr
+     * $('#id').data(); // get all data
+     * ```
+     *
+     * @param {String | undefined} key
+     * @param {String | undefined} value
+     * @returns {Object | String | Selector}
+     */
     data: function(key, value) {
       if (key === undefined && value === undefined) {
         var el = this[0];
@@ -1085,6 +1264,17 @@
    * Style module.
    */
   var styles = {
+
+    /**
+     * Compute the offset relative to the browser
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').offset(); // return {left:100,top:100}
+     * ```
+     *
+     * @returns {Object} object contains left and top key
+     */
     offset: function() {
       var elem = this[0];
       var rect = {
@@ -1121,6 +1311,22 @@
    * Event module.
    */
   var events = {
+
+    /**
+     * Bind events to some element/s
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').on('click', function(e){ alert(e) });
+     * $('#id').on('click mousedown', function(e){ alert(e) });
+     * $('#id').on('click mousedown', '#child', function(e){ alert(e) });
+     * ```
+     *
+     * @param {String} ev eventList
+     * @param {Function || String} selector
+     * @param {Function || undefined} fn
+     * @returns {Selector} origin selector object
+     */
     on: function(ev, selector, fn) {
 
       $.each(this, function(i, elem) {
@@ -1170,6 +1376,18 @@
       return this;
     },
 
+    /**
+     * Trigger event
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').on('click', function(){ alert(1) });
+     * $('#id').trigger('click'); // alert 1
+     * ```
+     *
+     * @param {String} event
+     * @returns {Selector}
+     */
     trigger: function(event) {
       var handle;
       var isSelf;
@@ -1343,9 +1561,24 @@
 
   // Hover and Delegate event.
   $.extend(Selector.prototype, {
+
+    /**
+     * Hover event
+     *
+     * @param {Function} fnOver
+     * @param {Function} fnOut
+     * @returns {Selector}
+     */
     hover: function(fnOver, fnOut) {
       return this.mouseenter(fnOver).mouseleave(fnOut || fnOver);
     },
+
+    /**
+     * Delegate event
+     *
+     * @deprecated
+     * @returns {Selector}
+     */
     delegate: function(selector, types, fn) {
       return this.on(types, selector, fn);
     }
@@ -1355,6 +1588,13 @@
    * Help functions.
    */
   var tools = {
+
+    /**
+     * Tranverse function
+     *
+     * @param {Array | Object | Selector} obj
+     * @param {Function} callback
+     */
     each: function(obj, callback) {
       var i = 0;
       var value;
@@ -1479,6 +1719,13 @@
       }
     },
 
+    /**
+     * Proxy function to certain context
+     *
+     * @param {Function} fn
+     * @param {Object} context
+     * @returns {Function} the binded function
+     */
     proxy: function(fn, context) {
       if ($.type(fn) !== 'function') {
         return null;
@@ -1492,6 +1739,12 @@
       }
     },
 
+    /**
+     * Build document fragment
+     *
+     * @param {String} value html string
+     * @returns {DocumentFragment}
+     */
     buildFragment: function(value) {
       var frag = document.createDocumentFragment();
       var temp = document.createElement('div');
@@ -1536,6 +1789,28 @@
    * @param options
    */
   var ajaxs = {
+
+    /**
+     * Ajax function
+     *
+     * ### example:
+     * ```javascript
+     * $.ajax({
+     *   url: '/api',
+     *   type: 'POST',
+     *   data: {a:1,b:2},
+     *   success: function(data){
+     *   },
+     *   error: function(data){
+     *   },
+     *   complete: function(data){
+     *   }
+     * });
+     * ```
+     *
+     * @param {Object} options
+     * @see http://api.jquery.com/jquery.ajax/
+     */
     ajax: function(options) {
       var formatParam = function(p) {
         var ret = [];
@@ -1594,7 +1869,13 @@
       var request = new XMLHttpRequest();
       dataType && request.overrideMimeType(accepts[dataType]);
       request.onload = function() {
-        success.call(null, request.responseText);
+        var text = request.responseText;
+        if(request.getResponseHeader('Content-Type').match(/json/)) {
+          try {
+            text = JSON.parse(text);
+          } catch (e) {}
+        }
+        success.call(null, text);
         complete.call(null, request);
       };
       request.onerror = function() {
