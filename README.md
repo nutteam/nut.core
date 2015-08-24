@@ -14,6 +14,10 @@ Version: 0.0.2
 
 $ singleton.
 
+**!!!Now, when selector is string, it only support two-layer selector,**
+**Comming soon,it will support all the selectors which w3c selector-API**
+**`document.querySelectorAll` support.**
+
 ### Params:
 
 * **String|DOMElement|Selector|Function** *selector* <br/> - html string. such as "#id",".class","tag".<br/>
@@ -21,9 +25,6 @@ $ singleton.
 - dom element. such as "document.body".<br/>
 - Selector instance. such as "$('#id')".<br/>
 - an anonymous function. such as "function(){}".<br/>
-**!!!Now, when selector is string, it only support two-layer selector,**
-**Comming soon,it will support all the selectors which w3c selector-API**
-** `document.querySelectorAll` support. **
 
 ### Return:
 
