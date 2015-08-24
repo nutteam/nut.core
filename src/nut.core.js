@@ -145,14 +145,14 @@
    * $ singleton.
    *
    * @param {String | DOMElement | Selector | Function} selector <br/>
-   * html string. such as "#id",".class","tag".<br/>
-   * html string. such as "`<div></div>`".<br/>
-   * dom element. such as "document.body".<br/>
-   * Selector instance. such as "$('#id')".<br/>
-   * an anonymous function. such as "function(){}".<br/>
+   * - html string. such as "#id",".class","tag".<br/>
+   * - html string. such as "`<div></div>`".<br/>
+   * - dom element. such as "document.body".<br/>
+   * - Selector instance. such as "$('#id')".<br/>
+   * - an anonymous function. such as "function(){}".<br/>
    * **!!!Now, when selector is string, it only support two-layer selector,**
-   * **Comming soon,it will support all the selectors**
-   * **which w3c selector-API `document.querySelectorAll` support. **
+   * **Comming soon,it will support all the selectors which w3c selector-API**
+   * ** `document.querySelectorAll` support. **
    *
    * @returns {Selector} return Selector instance.
    */
