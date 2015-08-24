@@ -48,7 +48,7 @@ describe('test selector', function() {
 
 describe('test extend', function() {
 
-  it('simple copy', function() {
+  it('shallow copy', function() {
     var base = {
       a: 1,
       b: [1, 2, 3],

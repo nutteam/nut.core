@@ -139,7 +139,7 @@
    * $ singleton.
    *
    * @param {String | Object | Function} selector
-   * such as "#id",".class","tag".
+   * html string. such as "#id",".class","tag".
    * html string. such as "<div></div>".
    * html element. such as "document.body".
    * Selector instance. such as "$('#id')".
@@ -151,9 +151,18 @@
   };
 
   /**
-  * Create plugin
-  * @returns plugin
-  */
+   * Create Plugin
+   *
+   * ```javascript
+   * $.fn.tab = function(config) {
+   *   // balabala
+   * };
+   *
+   * $('.tab').tab();
+   * ```
+   *
+   * @type {Object|Function}
+   */
   $.fn = Selector.prototype;
 
   // Register a module. module: a module of functions.
@@ -162,7 +171,18 @@
   };
 
   /**
-   * deep or shallow copy an object
+   * Deep or shallow copy an object
+   *
+   * ### example:
+   * ```javascript
+   * var base = { a : 1, b : { c : 1 } };
+   * var obj = { a : 1, b : { c : 1, d : 2 } };
+   * // shallow copy
+   * var newObj = $.extend({}, base, obj); // base not changed
+   * var newObj2 = $.extend(base, obj); // base changed
+   * // deep copy
+   * var newObj3 = $.extend(true, {}, base, obj); // base not changed
+   * ```
    *
    * @type {Function}
    */
@@ -232,7 +252,7 @@
   var attributes = {
 
     /**
-     * DOM增加class,或class list
+     * Add class,or class list
      *
      * ### example:
      * ```javascript
@@ -260,7 +280,7 @@
     },
 
     /**
-     * 判断DOM是否含有某个class
+     * Dose has some class
      *
      * ### example:
      * ```javascript
@@ -275,13 +295,13 @@
     },
 
     /**
-     * DOM删除class,或class list
+     * Remove class,or class list
      *
      * ### example:
      * ```javascript
      * $('#id').removeClass('myclass');
      * $('.class').removeClass('myclass1 myclass2');
-     * $('.class').removeClass(); // 删除所有class
+     * $('.class').removeClass(); // remove all class
      * ```
      *
      * @param {String | undefined} classList
@@ -306,7 +326,7 @@
     },
 
     /**
-     * DOM切换某个class，有则删，无则加
+     * Toggle some class
      *
      * ### example:
      * ```javascript
@@ -325,12 +345,12 @@
     },
 
     /**
-     * DOM设置属性，或读取属性
+     * Set or get attribute
      *
      * ### example:
      * ```javascript
-     * $('#id').attr('myattr', 'value'); // 设置
-     * $('#id').attr('myattr'); // 读取
+     * $('#id').attr('myattr', 'value'); // set
+     * $('#id').attr('myattr'); // get
      * ```
      *
      * @param {String} attr
@@ -359,7 +379,7 @@
     },
 
     /**
-     * DOM删除属性
+     * Delete attribute
      *
      * ### example:
      * ```javascript
@@ -377,12 +397,12 @@
     },
 
     /**
-     * 表单标签设置值或取值
+     * Set or get value of form elements
      *
      * ### example:
      * ```javascript
-     * $('input').val('1'); // 设置
-     * $('input').val(); // 读取
+     * $('input').val('1'); // set
+     * $('input').val(); // get
      * ```
      *
      * @param {String | undefined} val
@@ -400,12 +420,12 @@
     },
 
     /**
-     * DOM设置文本或读文本
+     * Set or get text content
      *
      * ### example:
      * ```javascript
-     * $('#id').text('mytext'); // 设置
-     * $('.class').text(); // 取值
+     * $('#id').text('mytext'); // set
+     * $('.class').text(); // get
      * ```
      *
      * @param {String | undefined} text
@@ -423,12 +443,12 @@
     },
 
     /**
-     * DOM设置html或读html
+     * Set or get inner html content
      *
      * ### example:
      * ```javascript
-     * $('#id').html('<i>html</i>'); // 设置
-     * $('.class').html(); // 取值
+     * $('#id').html('<i>html</i>'); // set
+     * $('.class').html(); // get
      * ```
      *
      * @param {String | undefined} html
@@ -457,6 +477,20 @@
    * DOM tranverse module.
    */
   var traverse = {
+
+    /**
+     * Find some child element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').find('.class');
+     * $('#id').find($('.class'));
+     * $('#id').find(document.getElementById('id2'));
+     * ```
+     *
+     * @param {String | Selector | DOMElement} selector
+     * @returns {Selector}
+     */
     find: function(selector) {
       var k = 0;
       var that = new Selector();
@@ -479,6 +513,16 @@
       return that;
     },
 
+    /**
+     * Find parent element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').parent();
+     * ```
+     *
+     * @returns {Selector}
+     */
     parent: function() {
       var k = 0;
       var element;
@@ -496,6 +540,16 @@
       return that;
     },
 
+    /**
+     * Find children element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').children();
+     * ```
+     *
+     * @returns {Selector}
+     */
     children: function() {
       var k = 0;
       var element;
@@ -516,6 +570,19 @@
       return that;
     },
 
+    /**
+     * Find closest parent element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').closest('.class');
+     * $('#id').closest($('.class'));
+     * $('#id').closest(document.getElementById('id2'));
+     * ```
+     *
+     * @param {String | Selector | DOMElement} selector
+     * @returns {Selector}
+     */
     closest: function(selector) {
       var k = 0;
       var that = new Selector();
@@ -538,6 +605,17 @@
       return that;
     },
 
+    /**
+     * Find some sibling element or certain index
+     *
+     * ### example:
+     * ```javascript
+     * $('.class').eq(2);
+     * ```
+     *
+     * @param {Integer} index
+     * @returns {Selector}
+     */
     eq: function(index) {
       var that = new Selector();
       var len = this.length;
@@ -555,10 +633,32 @@
       return that;
     },
 
+    /**
+     * Find some sibling element or certain index,
+     * different from eq is that get return native dom
+     *
+     * ### example:
+     * ```javascript
+     * $('.class').get(2);
+     * ```
+     *
+     * @param {Integer} index
+     * @returns {DOMElement}
+     */
     get: function(index) {
       return $(this).eq(index)[0];
     },
 
+    /**
+     * Find all the sibling elements
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').siblings();
+     * ```
+     *
+     * @returns {Selector}
+     */
     siblings: function() {
       var k = 0;
       var that = new Selector();
@@ -582,6 +682,16 @@
       return that;
     },
 
+    /**
+     * Find the prev sibling element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').prev();
+     * ```
+     *
+     * @returns {Selector}
+     */
     prev: function() {
       var k = 0;
       var element;
@@ -599,6 +709,16 @@
       return that;
     },
 
+    /**
+     * Find the next sibling element
+     *
+     * ### example:
+     * ```javascript
+     * $('#id').next();
+     * ```
+     *
+     * @returns {Selector}
+     */
     next: function() {
       var k = 0;
       var element;
@@ -616,6 +736,19 @@
       return that;
     },
 
+    /**
+     * Get the index of some element in sibling elements
+     *
+     * ### expample:
+     * ```javascript
+     * $('#id').index(); // return the current element index
+     * $('.class').index(document.getElementById('id'));
+     * $('.class').index($('#id'));
+     * ```
+     *
+     * @param {Integer | Selector | DOMElement} element
+     * @returns {Number}
+     */
     index: function(element) {
       var ret = -1;
 
@@ -641,6 +774,12 @@
       return ret;
     },
 
+    /**
+     * Callback traversal of dom elements
+     *
+     * @param {Function} callback
+     * @returns {traverse}
+     */
     each: function(callback) {
       $.each(this, callback);
       return this;

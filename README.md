@@ -1,198 +1,454 @@
-# Nut API文档
-> 所含接口是jQuery的常用子集。主要包括：DOM,Event,Ajax
 
 
-## DOM-attributes
+<!-- Start src/nut.core.js -->
 
-### addClass `.addClass(classList)`
-DOM增加class,或class list
-* param classList {String}
+A DOM library. Impressed by jQuery and Zepto.
+The APIs is subset of jQuery, if you know jQuery, you already know Nut.
+
+Author: Shengjie.Yu
+
+Version: 0.0.2
+
+## $(selector)
+
+$ singleton.
+
+### Params:
+
+* **String|Object|Function** *selector* html string. such as "#id",".class","tag".
+html string. such as "<div></div>".
+html element. such as "document.body".
+Selector instance. such as "$('#id')".
+an anonymous function. such as "function(){}".
+
+### Return:
+
+* **Selector** return Selector instance.
+
+## fn
+
+Create Plugin
+
+```javascript
+$.fn.tab = function(config) {
+  // balabala
+};
+
+$('.tab').tab();
+```
+
+## extend
+
+Deep or shallow copy an object
+
+### example:
+```javascript
+var base = { a : 1, b : { c : 1 } };
+var obj = { a : 1, b : { c : 1, d : 2 } };
+// shallow copy
+var newObj = $.extend({}, base, obj); // base not changed
+var newObj2 = $.extend(base, obj); // base changed
+// deep copy
+var newObj3 = $.extend(true, {}, base, obj); // base not changed
+```
+
+## attributes
+
+DOM attribute module.
+
+## addClass(classList)
+
+Add class,or class list
+
+### example:
 ```javascript
 $('#id').addClass('myclass');
 $('.class').addClass('myclass1 myclass2');
 ```
-### removeClass `.removeClass(classList)`
-DOM删除class,或class list
-* param classList {String || undefined}
-```javascript
 
-```
-### hasClass `.hasClass(className)`
-判断DOM是否含有某个class
-* param className {String}
+### Params:
+
+* **String** *classList* class or classList
+
+### Return:
+
+* **Selector** origin selector object
+
+## hasClass(className)
+
+Dose has some class
+
+### example:
 ```javascript
 $('#id').hasClass('myclass');
 ```
-### toggleClass `.toggleClass(className)`
-DOM切换某个class，有则删，无则加
-* param className {String}
+
+### Params:
+
+* **String** *className* 
+
+### Return:
+
+* **Boolean** 
+
+## removeClass(classList)
+
+Remove class,or class list
+
+### example:
+```javascript
+$('#id').removeClass('myclass');
+$('.class').removeClass('myclass1 myclass2');
+$('.class').removeClass(); // remove all class
+```
+
+### Params:
+
+* **String** *classList* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## toggleClass(className)
+
+Toggle some class
+
+### example:
 ```javascript
 $('#id').toggleClass('myclass');
 ```
-### attr `.attr(attr, val)`
-DOM设置属性，或读取属性
-* param attr {String}
-* param val {String || undefined}
+
+### Params:
+
+* **String** *className* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## attr(attr, val)
+
+Set or get attribute
+
+### example:
 ```javascript
-$('#id').attr('myattr', 'value'); // 设置
-$('#id').attr('myattr'); // 读取
+$('#id').attr('myattr', 'value'); // set
+$('#id').attr('myattr'); // get
 ```
-### removeAttr `.removeAttr(attr)`
-DOM删除属性
-* param attr {String}
+
+### Params:
+
+* **String** *attr* 
+* **String** *val* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## removeAttr(attr)
+
+Delete attribute
+
+### example:
 ```javascript
 $('#id').removeAttr('myattr');
 ```
-### val `.val(val)`
-表单标签设置值或取值
-* param val {String || undefined}
+
+### Params:
+
+* **String** *attr* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## val(val)
+
+Set or get value of form elements
+
+### example:
 ```javascript
-$('input').val('1'); // 设置
-$('input').val(); // 读取
-```
-### text `.text(text)`
-DOM设置文本或读文本
-* param text {String || undefined}
-```javascript
-$('#id').text('mytext'); // 设置
-$('.class').text(); // 取值
-```
-### html `.html(html)`
-DOM设置html或读html
-* param html {String || undefined}
-```javascript
-$('#id').html('<i>html</i>'); // 设置
-$('.class').html(); // 取值
+$('input').val('1'); // set
+$('input').val(); // get
 ```
 
-## DOM-traverse
+### Params:
 
-### find `.find(selector)`
-查找元素
-* param selector {String || Selector || DOMElement}
+* **String** *val* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## text(text)
+
+Set or get text content
+
+### example:
+```javascript
+$('#id').text('mytext'); // set
+$('.class').text(); // get
+```
+
+### Params:
+
+* **String** *text* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## html(html)
+
+Set or get inner html content
+
+### example:
+```javascript
+$('#id').html('<i>html</i>'); // set
+$('.class').html(); // get
+```
+
+### Params:
+
+* **String** *html* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## traverse
+
+DOM tranverse module.
+
+## find(selector)
+
+Find some child element
+
+### example:
 ```javascript
 $('#id').find('.class');
 $('#id').find($('.class'));
 $('#id').find(document.getElementById('id2'));
 ```
-### parent `.parent()`
-查找父元素
-* param {undefined}
+
+### Params:
+
+* **String|Selector|DOMElement** *selector* 
+
+### Return:
+
+* **Selector** 
+
+## parent()
+
+Find parent element
+
+### example:
 ```javascript
 $('#id').parent();
 ```
-### children `.children()`
-查找子元素
-* param {undefined}
+
+### Return:
+
+* **Selector** 
+
+## children()
+
+Find children element
+
+### example:
 ```javascript
 $('#id').children();
 ```
-### closest `.closest(selector)`
-查找最近的父元素
-* param selector {String || Selector || DOMElement}
+
+### Return:
+
+* **Selector** 
+
+## closest(selector)
+
+Find closest parent element
+
+### example:
 ```javascript
 $('#id').closest('.class');
 $('#id').closest($('.class'));
 $('#id').closest(document.getElementById('id2'));
 ```
-### eq `.eq(index)`
-查找同级某个索引值的元素
-* param index {Integer}
+
+### Params:
+
+* **String|Selector|DOMElement** *selector* 
+
+### Return:
+
+* **Selector** 
+
+## eq(index)
+
+Find some sibling element or certain index
+
+### example:
 ```javascript
-$('.class').eq(2); // 返回同级的第三个Selector元素
+$('.class').eq(2);
 ```
-### get `.get(index)`
-查找同级某个索引值的元素，与eq的差异是get返回的是原生DOMElement
-* param index {Integer}
+
+### Params:
+
+* **Integer** *index* 
+
+### Return:
+
+* **Selector** 
+
+## get(index)
+
+Find some sibling element or certain index,
+different from eq is that get return native dom
+
+### example:
 ```javascript
-$('.class').get(2); // 返回同级的第三个DOMElement元素
+$('.class').get(2);
 ```
-### siblings `.siblings()`
-查找所有兄弟节点
-* param {undefined}
+
+### Params:
+
+* **Integer** *index* 
+
+### Return:
+
+* **DOMElement** 
+
+## siblings()
+
+Find all the sibling elements
+
+### example:
 ```javascript
 $('#id').siblings();
 ```
-### prev `.prev()`
-查找上一个兄弟节点
-* param {undefined}
+
+### Return:
+
+* **Selector** 
+
+## prev()
+
+Find the prev sibling element
+
+### example:
 ```javascript
 $('#id').prev();
 ```
-### next `.next()`
-查找下一个兄弟节点
-* param {undefined}
+
+### Return:
+
+* **Selector** 
+
+## next()
+
+Find the next sibling element
+
+### example:
 ```javascript
 $('#id').next();
 ```
-### index `.index(element)`
-查找节点在同级节点中的索引
-* param selector {Integer || Selector || DOMElement}
+
+### Return:
+
+* **Selector** 
+
+## index(element)
+
+Get the index of some element in sibling elements
+
+### expample:
 ```javascript
-$('#id').index(); // 返回当前节点的索引
+$('#id').index(); // return the current element index
 $('.class').index(document.getElementById('id'));
 $('.class').index($('#id'));
 ```
-### each `.each(callback)`
-对节点集合进行遍历
-* param callback {Function}
-```javascript
-$('.class').each(function(i, elem){
-  console.log(i); // 索引
-  console.log(elem); // 元素
-});
-```
-## DOM-effect
 
-### hide `.hide()`
-隐藏元素
-* param 
-### show
-### toggle
+### Params:
 
-## DOM-css
+* **Integer|Selector|DOMElement** *element* 
 
-### css
-### width
-### height
+### Return:
 
-## DOM-dom
+* **Number** 
 
-### empty
-### remove
-### before
-### after
-### append
-### appendTo
-### prepend
-### toArray
-### size
+## each(callback)
 
-## DOM-filters
+Callback traversal of dom elements
 
-### is
+### Params:
 
-## DOM-data
+* **Function** *callback* 
 
-### data
+### Return:
 
-## DOM-styles
+* **traverse** 
 
-### offset
+## effects
+
+DOM effect module.
+
+## css
+
+DOM style module.
+
+## dom
+
+DOM manipulations module.
+
+## data
+
+DOM data module.
+
+## styles
+
+Style module.
+
+## events
+
+Event module.
 
 ## Event
 
-### on
-### trigger
+Event constructor
 
-## Ajax
-### ajax
+### Params:
 
-## CHANGELOG
-* 0.0.1 支持UC浏览器PC版新标签页
-* 0.0.2 支持m.uc123.com，[UMD](https://github.com/umdjs/umd)
+* **String** *src* event type or Event Object.   Support standard or custom events.
 
-## 谁在用:
-[UC浏览器PC版](http://pc.uc.cn/)
+### Return:
 
-[m.uc123.com](http://m.uc123.com/)
+* **$.Event** 
+
+## $.Event
+
+Prototype functions of $.Event.
+
+## tools
+
+Help functions.
+
+## getSelectorMatch()
+
+Find element
+
+## ajaxs
+
+Ajax module.
+
+### Params:
+
+* **** *options* 
+
+Hook tool functions to $.
+
+Hook ajax functions to $.
+
+<!-- End src/nut.core.js -->
+

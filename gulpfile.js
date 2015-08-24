@@ -25,7 +25,7 @@ gulp.task('jscs', function() {
 gulp.task("doc", function() {
   return gulp.src("src/*.js")
     .pipe(markdox())
-    .pipe(concat("api.md"))
+    .pipe(concat("README.md"))
     .pipe(gulp.dest("./"));
 });
 
