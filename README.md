@@ -20,8 +20,8 @@ $ singleton.
 html string. such as "`<div></div>`".<br/>
 dom element. such as "document.body".<br/>
 Selector instance. such as "$('#id')".<br/>
-an anonymous function. such as "function(){}".
-**Now, when selector is string, it only support two-layer selector,**
+an anonymous function. such as "function(){}".<br/>
+**!!!Now, when selector is string, it only support two-layer selector,**
 **Comming soon,it will support all the selectors**
 **which w3c selector-API `document.querySelectorAll` support. **
 
