@@ -15,10 +15,10 @@ $ singleton.
 
 ### Params:
 
-* **String|Object|Function** *selector* html string. such as "#id",".class","tag".
-html string. such as "<div></div>".
-html element. such as "document.body".
-Selector instance. such as "$('#id')".
+* **String|Object|Function** *selector* <br/> html string. such as "#id",".class","tag".<br/>
+html string. such as `<div></div>`.<br/>
+html element. such as "document.body".<br/>
+Selector instance. such as "$('#id')".<br/>
 an anonymous function. such as "function(){}".
 
 ### Return:
@@ -238,7 +238,7 @@ $('#id').find(document.getElementById('id2'));
 
 ### Return:
 
-* **Selector** 
+* **Selector** the finded elements
 
 ## parent()
 
@@ -251,7 +251,7 @@ $('#id').parent();
 
 ### Return:
 
-* **Selector** 
+* **Selector** the parent element
 
 ## children()
 
@@ -264,7 +264,7 @@ $('#id').children();
 
 ### Return:
 
-* **Selector** 
+* **Selector** the children elements
 
 ## closest(selector)
 
@@ -283,7 +283,7 @@ $('#id').closest(document.getElementById('id2'));
 
 ### Return:
 
-* **Selector** 
+* **Selector** the closest parent element
 
 ## eq(index)
 
@@ -300,7 +300,7 @@ $('.class').eq(2);
 
 ### Return:
 
-* **Selector** 
+* **Selector** the finded element
 
 ## get(index)
 
@@ -318,7 +318,7 @@ $('.class').get(2);
 
 ### Return:
 
-* **DOMElement** 
+* **DOMElement** the finded element
 
 ## siblings()
 
@@ -331,7 +331,7 @@ $('#id').siblings();
 
 ### Return:
 
-* **Selector** 
+* **Selector** the sibling elements
 
 ## prev()
 
@@ -344,7 +344,7 @@ $('#id').prev();
 
 ### Return:
 
-* **Selector** 
+* **Selector** the prev element
 
 ## next()
 
@@ -357,7 +357,7 @@ $('#id').next();
 
 ### Return:
 
-* **Selector** 
+* **Selector** the next element
 
 ## index(element)
 
@@ -376,7 +376,7 @@ $('.class').index($('#id'));
 
 ### Return:
 
-* **Number** 
+* **Number** the index
 
 ## each(callback)
 
@@ -388,31 +388,333 @@ Callback traversal of dom elements
 
 ### Return:
 
-* **traverse** 
+* **Selector** origin selector object
 
 ## effects
 
 DOM effect module.
 
+## hide()
+
+Hide some element/s
+
+### Return:
+
+* **Selector** origin selector object
+
+## show()
+
+Show some element/s
+
+### Return:
+
+* **Selector** origin selector object
+
+## toggle()
+
+Toggle some element/s
+
+### Return:
+
+* **Selector** origin selector object
+
 ## css
 
 DOM style module.
+
+## css(attr, val, extra)
+
+Set or get the css value of some attribute
+
+### example:
+```javascript
+$('#id').css('width', 100);
+$('#id').css('height');
+$('#id').css({
+  'width': 100,
+  'height': 100
+});
+```
+
+### Params:
+
+* **String|Object** *attr* 
+* **String** *val* 
+* **String** *extra* inner or outer
+
+### Return:
+
+* **Selector** origin selector object
+
+## width(w)
+
+Get the width of element
+
+### Params:
+
+* **String** *w* width
+
+### Return:
+
+* **Selector** origin selector object
+
+## height(h)
+
+Get the height of element
+
+### Params:
+
+* **String** *h* 
+
+### Return:
+
+* **Selector** origin selector object
 
 ## dom
 
 DOM manipulations module.
 
+## empty()
+
+Set the inner html of selected element empty
+
+### Return:
+
+* **Selector** origin selector object
+
+## remove()
+
+Remove the selected element
+
+### Return:
+
+* **Selector** origin selector object
+
+## before(value)
+
+Insert some element before selected element
+
+### example:
+```javascript
+$('#id').before($('#id1'));
+$('#id').before('<div>1</div>');
+$('#id').before(document.createElement('p'));
+```
+
+### Params:
+
+* **Selector|String|DOMElement** *value* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## after(value)
+
+Insert some element after selected element
+
+### example:
+```javascript
+$('#id').after($('#id1'));
+$('#id').after('<div>1</div>');
+$('#id').after(document.createElement('p'));
+```
+
+### Params:
+
+* **Selector|String|DOMElement** *value* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## append(value)
+
+Append some element of selected element
+
+### example:
+```javascript
+$('#id').append($('#id1'));
+$('#id').append('<div>1</div>');
+$('#id').append(document.createElement('p'));
+```
+
+### Params:
+
+* **Selector|String|DOMElement** *value* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## appendTo(value)
+
+Append element to the certain element
+
+### example:
+```javascript
+$($('#id1')).appendTo('#id');
+$('<div>1</div>').appendTo('#id');
+$(document.createElement('p')).appendTo('#id');
+```
+
+### Params:
+
+* **Selector|String|DOMElement** *value* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## prepend(value)
+
+Pre append element to the certain element
+
+### example:
+```javascript
+$($('#id1')).prepend('#id');
+$('<div>1</div>').prepend('#id');
+$(document.createElement('p')).prepend('#id');
+```
+
+### Params:
+
+* **Selector|String|DOMElement** *value* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## toArray()
+
+Convert Selector objects to Array
+
+### example:
+```javascript
+$('.class').toArray(); // return [dom1, dom2..]
+```
+
+### Return:
+
+* **Array** the dom array
+
+## size()
+
+Get the length of selected objects
+
+### example:
+```javascript
+$('.class').size(); // get 5
+```
+
+### Return:
+
+* **Number** the length
+
+## is(selector)
+
+Check the element belong to some type
+
+### example:
+```javascript
+$('#id').is(':hidden');
+$('#id').is(':visible');
+$('#id').is('#id');
+$('.class').is('.class');
+$('a').is('a');
+```
+
+### Params:
+
+* **String** *selector* 
+
+### Return:
+
+* **Boolean** 
+
 ## data
 
 DOM data module.
+
+## data(key, value)
+
+Set or get the data of dom element
+
+### example:
+```javascript
+$('#id').data('attr', '1'); // set
+$('#id').data('attr'); // get the data of attr
+$('#id').data(); // get all data
+```
+
+### Params:
+
+* **String** *key* 
+* **String** *value* 
+
+### Return:
+
+* **Object|String|Selector** 
 
 ## styles
 
 Style module.
 
+## offset()
+
+Compute the offset relative to the browser
+
+### example:
+```javascript
+$('#id').offset(); // return {left:100,top:100}
+```
+
+### Return:
+
+* **Object** object contains left and top key
+
 ## events
 
 Event module.
+
+## on(ev, selector, fn)
+
+Bind events to some element/s
+
+### example:
+```javascript
+$('#id').on('click', function(e){ alert(e) });
+$('#id').on('click mousedown', function(e){ alert(e) });
+$('#id').on('click mousedown', '#child', function(e){ alert(e) });
+```
+
+### Params:
+
+* **String** *ev* eventList
+* **Function|String** *selector* 
+* **Function** *fn* 
+
+### Return:
+
+* **Selector** origin selector object
+
+## trigger(event)
+
+Trigger event
+
+### example:
+```javascript
+$('#id').on('click', function(){ alert(1) });
+$('#id').trigger('click'); // alert 1
+```
+
+### Params:
+
+* **String** *event* 
+
+### Return:
+
+* **Selector** 
 
 ## Event
 
@@ -430,25 +732,99 @@ Event constructor
 
 Prototype functions of $.Event.
 
+## hover(fnOver, fnOut)
+
+Hover event
+
+### Params:
+
+* **Function** *fnOver* 
+* **Function** *fnOut* 
+
+### Return:
+
+* **Selector** 
+
+## delegate()
+
+Delegate event
+
+**Deprecated**
+
+### Return:
+
+* **Selector** 
+
 ## tools
 
 Help functions.
+
+## each(obj, callback)
+
+Tranverse function
+
+### Params:
+
+* **Array|Object|Selector** *obj* 
+* **Function** *callback* 
 
 ## getSelectorMatch()
 
 Find element
 
+## proxy(fn, context)
+
+Proxy function to certain context
+
+### Params:
+
+* **Function** *fn* 
+* **Object** *context* 
+
+### Return:
+
+* **Function** the binded function
+
+## buildFragment(value)
+
+Build document fragment
+
+### Params:
+
+* **String** *value* html string
+
+### Return:
+
+* **DocumentFragment** 
+
 ## ajaxs
 
 Ajax module.
 
+## ajax(options)
+
+Ajax function
+
+### example:
+```javascript
+$.ajax({
+  url: '/api',
+  type: 'POST',
+  data: {a:1,b:2},
+  success: function(data){
+  },
+  error: function(data){
+  },
+  complete: function(data){
+  }
+});
+```
+
+See: http://api.jquery.com/jquery.ajax/
+
 ### Params:
 
-* **** *options* 
-
-Hook tool functions to $.
-
-Hook ajax functions to $.
+* **Object** *options* 
 
 <!-- End src/nut.core.js -->
 

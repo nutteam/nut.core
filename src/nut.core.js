@@ -143,11 +143,11 @@
   /**
    * $ singleton.
    *
-   * @param {String | Object | Function} selector
-   * html string. such as "#id",".class","tag".
-   * html string. such as "<div></div>".
-   * html element. such as "document.body".
-   * Selector instance. such as "$('#id')".
+   * @param {String | Object | Function} selector <br/>
+   * html string. such as "#id",".class","tag".<br/>
+   * html string. such as `<div></div>`.<br/>
+   * html element. such as "document.body".<br/>
+   * Selector instance. such as "$('#id')".<br/>
    * an anonymous function. such as "function(){}".
    * @returns {Selector} return Selector instance.
    */
@@ -852,7 +852,7 @@
      * });
      * ```
      *
-     * @param {String || Object} attr
+     * @param {String | Object} attr
      * @param {String | undefined} val
      * @param {String} extra inner or outer
      * @returns {Selector} origin selector object
@@ -1323,8 +1323,8 @@
      * ```
      *
      * @param {String} ev eventList
-     * @param {Function || String} selector
-     * @param {Function || undefined} fn
+     * @param {Function | String} selector
+     * @param {Function | undefined} fn
      * @returns {Selector} origin selector object
      */
     on: function(ev, selector, fn) {
@@ -1728,7 +1728,7 @@
      */
     proxy: function(fn, context) {
       if ($.type(fn) !== 'function') {
-        return null;
+        return $.noop();
       }
       return fn.bind(context);
     },
@@ -1786,7 +1786,6 @@
 
   /**
    * Ajax module.
-   * @param options
    */
   var ajaxs = {
 
@@ -1870,7 +1869,7 @@
       dataType && request.overrideMimeType(accepts[dataType]);
       request.onload = function() {
         var text = request.responseText;
-        if(request.getResponseHeader('Content-Type').match(/json/)) {
+        if (request.getResponseHeader('Content-Type').match(/json/)) {
           try {
             text = JSON.parse(text);
           } catch (e) {}
@@ -1909,14 +1908,10 @@
     }
   };
 
-  /**
-   * Hook tool functions to $.
-   */
+  // Hook tool functions to $.
   $.extend(tools);
 
-  /**
-   * Hook ajax functions to $.
-   */
+  // Hook ajax functions to $.
   $.extend(ajaxs);
 
   $.each(['innerWidth', 'innerHeight', 'outerWidth', 'outerHeight'],
