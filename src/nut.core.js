@@ -144,9 +144,9 @@
   /**
    * $ singleton.
    *
-   * **!!!Now, when selector is string, it only support two-layer selector,**
-   * **Comming soon,it will support all the selectors which w3c selector-API**
-   * **`document.querySelectorAll` support.**
+   * **!!!Now, when selector is string, it only supports two-layer selector,**
+   * **Comming soon,it will supports all the selectors which w3c selector-API**
+   * **`document.querySelectorAll` supports.**
    *
    * @param {String | DOMElement | Selector | Function} selector <br/>
    * - html string. such as "#id",".class","tag".<br/>
