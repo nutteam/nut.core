@@ -1,6 +1,6 @@
 
 
-<!-- Start src\nut.core.js -->
+<!-- Start src/nut.core.js -->
 
 # Nut.core.js
 A DOM library. Impressed by jQuery and Zepto.
@@ -13,10 +13,6 @@ Version: 0.0.2
 ## $(selector)
 
 $ singleton.
-
-**!!!Now, when selector is string, it only supports two-layer selector,**
-**Comming soon,it will supports all the selectors which w3c selector-API**
-**`document.querySelectorAll` supports.**
 
 ### Params:
 
@@ -831,5 +827,5 @@ See: http://api.jquery.com/jquery.ajax/
 
 * **Object** *options* 
 
-<!-- End src\nut.core.js -->
+<!-- End src/nut.core.js -->
 

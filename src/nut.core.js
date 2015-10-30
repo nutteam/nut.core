@@ -117,8 +117,11 @@
             element = element.length === 0 ? els :
               element.concat(els);
           } else {
-            console.error('selector too deep');
-            element = [];
+            try {
+              element = document.querySelectorAll(selector);
+            } catch (e) {
+              element = [];
+            }
           }
 
           for (elLen = element.length; j < elLen; j++) {
@@ -143,10 +146,6 @@
 
   /**
    * $ singleton.
-   *
-   * **!!!Now, when selector is string, it only supports two-layer selector,**
-   * **Comming soon,it will supports all the selectors which w3c selector-API**
-   * **`document.querySelectorAll` supports.**
    *
    * @param {String | DOMElement | Selector | Function} selector <br/>
    * - html string. such as "#id",".class","tag".<br/>

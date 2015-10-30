@@ -21,8 +21,10 @@ describe('test selector', function() {
     expect($('#jasmine ul').length).toEqual(1);
   });
 
-  it('selector deep', function() {
-    expect($('#jasmine ul li').length).toEqual(0);
+  it('deep selector', function() {
+    expect($('#jasmine ul li').length).toEqual(3);
+    expect($('#jasmine ul li [data-a="1"]').length).toEqual(1);
+    expect($('#traverse #level3 .eq').length).toEqual(3);
   });
 
   it('none selector', function() {
