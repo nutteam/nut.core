@@ -8,8 +8,10 @@
   "noarg": true,
   "undef": true,
   "unused": true,
+  "evil": true,
 
   "node": true,
+  "browser": true,
 
   "globals": {
 	"define": true,

@@ -23,9 +23,9 @@
   if (typeof define === 'function' && define.amd) {
     define([], factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(root);
+    module.exports = factory(window);
   } else {
-    root.$ = factory(root);
+    root.$ = factory(window);
   }
 }(this, function(window) {
   'use strict';
