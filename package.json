@@ -1,8 +1,9 @@
 {
-  "name": "Nut-Library",
+  "name": "wow-nut",
   "version": "0.0.2",
-  "description": "Front-end Library for UC.",
-  "author": "Shengjie.Yu <shengjie.yu@shenma-inc.com>",
+  "description": "JavaScript Library for UC HangZhou Team.",
+  "author": "aoto <aoto_yu@163.com> (http://aoto.github.io/)",
+  "main": "dist/nut.core.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/nutteam/nut.core.git"
