@@ -26,8 +26,6 @@ var $ = require('wow-nut');
 
 Author: Shengjie.Yu
 
-Version: 0.0.2
-
 ## $(selector)
 
 $ singleton.

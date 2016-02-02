@@ -22,7 +22,6 @@
  * [UC浏览器iPad版导航](http://m.uc123.com/)
  *
  * @author Shengjie.Yu
- * @version 0.0.2
  * @since 2015-01-22
  * Copyright 2014-2015 ucweb.
  * Released under the MIT license.
