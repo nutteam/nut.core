@@ -6,7 +6,15 @@
 A DOM library. Impressed by jQuery and Zepto.
 The APIs is subset of jQuery, if you know jQuery, you already know Nut.
 
-应用：
+## 使用:
+```bash
+npm install wow-nut
+```
+```javascript
+var $ = require('wow-nut');
+```
+
+## 应用：
 
 [UC浏览器网址分享](http://tbsweb.browser.taobao.com/recommend/index.html)
 
