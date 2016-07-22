@@ -1,6 +1,6 @@
 {
   "name": "wow-nut",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "JavaScript Library for UC HangZhou Team.",
   "author": "aoto <aoto_yu@163.com> (http://aoto.github.io/)",
   "main": "dist/nut.core.js",
