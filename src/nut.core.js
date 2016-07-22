@@ -27,9 +27,7 @@
  * Released under the MIT license.
  */
 (function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define([], factory);
-  } else if (typeof exports === 'object') {
+  if (typeof exports === 'object') {
     module.exports = factory(window);
   } else {
     root.$ = factory(window);
@@ -1937,15 +1935,16 @@
   $.extend(ajaxs);
 
   $.each(['innerWidth', 'innerHeight', 'outerWidth', 'outerHeight'],
-      function(i, name) {
-    if (name.match(/(inner|outer)(\w+)/)) {
-      $.fn[name] = (function(prop, value, extra) {
-        return function() {
-          return $(this).css(prop, null, extra);
-        };
-      }(RegExp.$2, null, RegExp.$1));
+    function(i, name) {
+      if (name.match(/(inner|outer)(\w+)/)) {
+        $.fn[name] = (function(prop, value, extra) {
+          return function() {
+            return $(this).css(prop, null, extra);
+          };
+        }(RegExp.$2, null, RegExp.$1));
+      }
     }
-  });
+  );
 
   // Build-in objects handle.
   $.each(buildInObjs, function(i, name) {

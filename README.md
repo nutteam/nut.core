@@ -1,6 +1,6 @@
 
 
-<!-- Start src/nut.core.js -->
+<!-- Start src\nut.core.js -->
 
 # Nut.core.js
 A DOM library. Impressed by jQuery and Zepto.
@@ -843,5 +843,5 @@ See: http://api.jquery.com/jquery.ajax/
 
 * **Object** *options* 
 
-<!-- End src/nut.core.js -->
+<!-- End src\nut.core.js -->
 
