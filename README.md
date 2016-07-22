@@ -4,7 +4,15 @@
 
 # Nut.core.js
 A DOM library. Impressed by jQuery and Zepto.
+
 The APIs is subset of jQuery, if you know jQuery, you already know Nut.
+
+It use the latest Web technology features, and it only support the latest Chrome.
+
+## Features
+- `great performance`
+- `super light weight`
+- `very good tested`
 
 ## Usage:
 ```bash
