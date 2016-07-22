@@ -14,17 +14,19 @@ npm install wow-nut
 var $ = require('wow-nut');
 ```
 
-## Apps：
+## Web Apps：
 
-[UC浏览器网址分享](http://tbsweb.browser.taobao.com/recommend/index.html)
+[UC浏览器网址分享添加](http://tbsweb.browser.taobao.com/recommend/index.html)
+
+[UC浏览器网址分享查询](http://tbsweb.browser.taobao.com/recommend/search.html)
 
 [UC浏览器购物车](http://browser.taobao.com/logistics/tbHelper.htm)
 
-[UC浏览器新PC版标签页](chrome://newtab/)
+[UC浏览器新PC版标签页](http://pc.uc.cn/)
 
 [UC浏览器iPad版导航](http://m.uc123.com/)
 
-Author: Shengjie.Yu
+Author: [Shengjie.Yu](https://github.com/aoto)
 
 ## $(selector)
 
